@@ -1,0 +1,50 @@
+image:
+  repository: eu.gcr.io/gardener-project/gardener/extensions/registry-cache
+  tag: latest
+  pullPolicy: IfNotPresent
+
+leaderElection:
+  resourceLock: leases
+
+replicaCount: 1
+
+resources: {}
+
+# settings for metrics, e.g. scraping by seed-prometheus
+metrics:
+  enableScraping: true
+  # default metrics endpoint in controller-runtime
+  port: 8080
+
+vpa:
+  enabled: true
+  # resourcePolicy:
+  #   minAllowed:
+  #     cpu: 100m
+  #     memory: 128Mi
+  updatePolicy:
+    updateMode: "Auto"
+
+controllers:
+  concurrentSyncs: 5
+  ignoreOperationAnnotation: false
+  healthcheck:
+    concurrentSyncs: 5
+  heartbeat: 
+    renewIntervalSeconds: 30 
+
+registryConfig:
+  registries:
+    - ...
+
+disableControllers: []
+
+# imageVectorOverwrite: |
+#   images:
+#     - name: registry
+#       sourceRepository: github.com/distribution/distribution
+#       repository: registry
+#       tag: "2.8.1"
+
+gardener:
+  version: ""
