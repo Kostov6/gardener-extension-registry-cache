@@ -27,25 +27,13 @@ import (
 )
 
 var (
-	//go:embed templates/crd-alicloudmachineclasses.tpl.yaml
-	machineClassAlicloudCRD string
-	//go:embed templates/crd-awsmachineclasses.tpl.yaml
-	machineClassAWSCRD string
-	//go:embed templates/crd-azuremachineclasses.tpl.yaml
-	machineClassAzureCRD string
-	//go:embed templates/crd-gcpmachineclasses.tpl.yaml
-	machineClassGCPCRD string
-	//go:embed templates/crd-openstackmachineclasses.tpl.yaml
-	machineClassOpenStackCRD string
-	//go:embed templates/crd-packetmachineclasses.tpl.yaml
-	machineClassPacketCRD string
-	//go:embed templates/crd-machineclasses.tpl.yaml
+	//go:embed templates/crd-machine.sapcloud.io_machineclasses.yaml
 	machineClassCRD string
-	//go:embed templates/crd-machinedeployments.tpl.yaml
+	//go:embed templates/crd-machine.sapcloud.io_machinedeployments.yaml
 	machineDeploymentCRD string
-	//go:embed templates/crd-machinesets.tpl.yaml
+	//go:embed templates/crd-machine.sapcloud.io_machinesets.yaml
 	machineSetCRD string
-	//go:embed templates/crd-machines.tpl.yaml
+	//go:embed templates/crd-machine.sapcloud.io_machines.yaml
 	machineCRD string
 
 	crdResources []string
@@ -53,12 +41,6 @@ var (
 
 func init() {
 	crdResources = []string{
-		machineClassAlicloudCRD,
-		machineClassAWSCRD,
-		machineClassAzureCRD,
-		machineClassGCPCRD,
-		machineClassOpenStackCRD,
-		machineClassPacketCRD,
 		machineClassCRD,
 		machineDeploymentCRD,
 		machineSetCRD,

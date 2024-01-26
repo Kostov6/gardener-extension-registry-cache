@@ -26,7 +26,6 @@ import (
 	v1beta1constants "github.com/gardener/gardener/pkg/apis/core/v1beta1/constants"
 	extensionsv1alpha1 "github.com/gardener/gardener/pkg/apis/extensions/v1alpha1"
 	"github.com/gardener/gardener/pkg/component/extensions/operatingsystemconfig/original/components"
-	"github.com/gardener/gardener/pkg/features"
 	"github.com/gardener/gardener/pkg/utils"
 )
 
@@ -67,9 +66,8 @@ func (initializer) Config(ctx components.Context) ([]extensionsv1alpha1.Unit, []
 
 	var script bytes.Buffer
 	if err := tplInitializer.Execute(&script, map[string]interface{}{
-		"binaryPath":                        extensionsv1alpha1.ContainerDRuntimeContainersBinFolder,
-		"pauseContainerImage":               ctx.Images[imagevector.ImageNamePauseContainer],
-		"containerdRegistryHostsDirEnabled": features.DefaultFeatureGate.Enabled(features.ContainerdRegistryHostsDir),
+		"binaryPath":          extensionsv1alpha1.ContainerDRuntimeContainersBinFolder,
+		"pauseContainerImage": ctx.Images[imagevector.ImageNamePauseContainer],
 	}); err != nil {
 		return nil, nil, err
 	}
@@ -77,7 +75,7 @@ func (initializer) Config(ctx components.Context) ([]extensionsv1alpha1.Unit, []
 	return []extensionsv1alpha1.Unit{
 			{
 				Name:    unitNameInitializer,
-				Command: pointer.String("start"),
+				Command: extensionsv1alpha1.UnitCommandPtr(extensionsv1alpha1.CommandStart),
 				Enable:  pointer.Bool(true),
 				Content: pointer.String(`[Unit]
 Description=Containerd initializer
