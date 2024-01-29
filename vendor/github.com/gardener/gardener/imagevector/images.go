@@ -23,6 +23,8 @@ const (
 	ImageNameAlertmanager = "alertmanager"
 	// ImageNameAlpine is a constant for an image in the image vector with name 'alpine'.
 	ImageNameAlpine = "alpine"
+	// ImageNameAlpineConntrack is a constant for an image in the image vector with name 'alpine-conntrack'.
+	ImageNameAlpineConntrack = "alpine-conntrack"
 	// ImageNameApiserverProxy is a constant for an image in the image vector with name 'apiserver-proxy'.
 	ImageNameApiserverProxy = "apiserver-proxy"
 	// ImageNameApiserverProxySidecar is a constant for an image in the image vector with name 'apiserver-proxy-sidecar'.
@@ -59,6 +61,8 @@ const (
 	ImageNameGardenerControllerManager = "gardener-controller-manager"
 	// ImageNameGardenerMetricsExporter is a constant for an image in the image vector with name 'gardener-metrics-exporter'.
 	ImageNameGardenerMetricsExporter = "gardener-metrics-exporter"
+	// ImageNameGardenerNodeAgent is a constant for an image in the image vector with name 'gardener-node-agent'.
+	ImageNameGardenerNodeAgent = "gardener-node-agent"
 	// ImageNameGardenerResourceManager is a constant for an image in the image vector with name 'gardener-resource-manager'.
 	ImageNameGardenerResourceManager = "gardener-resource-manager"
 	// ImageNameGardenerScheduler is a constant for an image in the image vector with name 'gardener-scheduler'.
