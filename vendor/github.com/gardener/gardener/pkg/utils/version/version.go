@@ -39,6 +39,10 @@ var (
 	ConstraintK8sLess127 *semver.Constraints
 	// ConstraintK8sGreaterEqual128 is a version constraint for versions >= 1.28.
 	ConstraintK8sGreaterEqual128 *semver.Constraints
+	// ConstraintK8sEqual128 is a version constraint for versions == 1.28.
+	ConstraintK8sEqual128 *semver.Constraints
+	// ConstraintK8sGreaterEqual129 is a version constraint for versions >= 1.29.
+	ConstraintK8sGreaterEqual129 *semver.Constraints
 )
 
 func init() {
@@ -58,6 +62,10 @@ func init() {
 	ConstraintK8sLess127, err = semver.NewConstraint("< 1.27-0")
 	utilruntime.Must(err)
 	ConstraintK8sGreaterEqual128, err = semver.NewConstraint(">= 1.28-0")
+	utilruntime.Must(err)
+	ConstraintK8sEqual128, err = semver.NewConstraint("~ 1.28.x-0")
+	utilruntime.Must(err)
+	ConstraintK8sGreaterEqual129, err = semver.NewConstraint(">= 1.29-0")
 	utilruntime.Must(err)
 }
 
@@ -96,4 +104,42 @@ func normalize(version string) string {
 		v = v[:idx]
 	}
 	return v
+}
+
+// VersionRange represents a version range of type [AddedInVersion, RemovedInVersion).
+type VersionRange struct {
+	AddedInVersion   string
+	RemovedInVersion string
+}
+
+// Contains returns true if the range contains the given version, false otherwise.
+// The range contains the given version only if it's greater or equal than AddedInVersion (always true if AddedInVersion is empty),
+// and less than RemovedInVersion (always true if RemovedInVersion is empty).
+func (r *VersionRange) Contains(version string) (bool, error) {
+	var constraint string
+	switch {
+	case r.AddedInVersion != "" && r.RemovedInVersion == "":
+		constraint = fmt.Sprintf(">= %s", r.AddedInVersion)
+	case r.AddedInVersion == "" && r.RemovedInVersion != "":
+		constraint = fmt.Sprintf("< %s", r.RemovedInVersion)
+	case r.AddedInVersion != "" && r.RemovedInVersion != "":
+		constraint = fmt.Sprintf(">= %s, < %s", r.AddedInVersion, r.RemovedInVersion)
+	default:
+		constraint = "*"
+	}
+	return CheckVersionMeetsConstraint(version, constraint)
+}
+
+// SupportedVersionRange returns the supported version range for the given API.
+func (r *VersionRange) SupportedVersionRange() string {
+	switch {
+	case r.AddedInVersion != "" && r.RemovedInVersion == "":
+		return fmt.Sprintf("versions >= %s", r.AddedInVersion)
+	case r.AddedInVersion == "" && r.RemovedInVersion != "":
+		return fmt.Sprintf("versions < %s", r.RemovedInVersion)
+	case r.AddedInVersion != "" && r.RemovedInVersion != "":
+		return fmt.Sprintf("versions >= %s, < %s", r.AddedInVersion, r.RemovedInVersion)
+	default:
+		return "all kubernetes versions"
+	}
 }
